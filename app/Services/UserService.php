@@ -42,7 +42,7 @@ class UserService
     ) : array
     {
         if (Auth::attempt(['email' => $email, 'password' => $password])) { 
-            $user = Auth::user(); 
+            $user = Auth::user();
             $token =  $user->createToken('Personal Access Token')->accessToken;
             
             return [

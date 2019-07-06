@@ -65,7 +65,7 @@ class UserController extends Controller
         }
     }
 
-    public function logout(Request $request)
+    public function logout()
     {
         try {
             $this->user->logout();
