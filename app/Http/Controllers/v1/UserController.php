@@ -4,25 +4,30 @@ namespace App\Http\Controllers\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use App\User;
+use App\Services\UserService;
+use App\Exceptions\BlogException;
 
 class UserController extends Controller
 {
+    private $user;
+    
+    public function __construct(UserService $user)
+    {
+        $this->user = $user;
+    }
+    
     public function register(Request $request)
     {
         try {
-            $request['password'] = Hash::make($request['password']);
-            $user = User::create($request->toArray());
-            $token = $user->createToken('Personal Access Token')->accessToken;
-            
+            $result = $this->user->register(
+                $request->name,
+                $request->email,
+                $request->password
+            );
+
             return response()->json([
                 'status' => 'success',
-                'data' => [
-                    'token' => $token,
-                    'user' => $user,
-                ],
+                'data' => $result,
             ], 200);
 
         } catch (\Exception $e) {
@@ -36,24 +41,39 @@ class UserController extends Controller
     public function login(Request $request)
     {
         try {
-            if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) { 
-                $user = Auth::user(); 
-                $token =  $user->createToken('Personal Access Token')->accessToken; 
-                
-                return response()->json([
-                    'status' => 'success',
-                    'data' => [
-                        'token' => $token,
-                        'user' => $user,
-                    ],
-                ], 200);
-            } 
             
+            $result = $this->user->login(
+                $request->email,
+                $request->password
+            );
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $result,
+            ], 200);
+            
+        } catch (BlogException $e) {
             return response()->json([
                 'status' => 'fail',
-                'message' => 'Unauthorized.',
+                'message' => $e->getMessage(),
             ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 
+    public function logout(Request $request)
+    {
+        try {
+            $this->user->logout();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => null,
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
@@ -67,7 +87,7 @@ class UserController extends Controller
         try {
             return response()->json([
                 'status' => 'success',
-                'data' => Auth::user(),
+                'data' => $this->user->details(),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
