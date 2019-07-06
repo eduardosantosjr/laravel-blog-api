@@ -9,9 +9,9 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-.env
 
 /public/css/*
 /public/js/*
 storage/api-docs/api-docs.json
 /logs/*
+/.vscode
