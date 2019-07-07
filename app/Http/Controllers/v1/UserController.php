@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\v1;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterUserRequest;
 use App\Http\Controllers\Controller;
 use App\Services\UserService;
 use App\Exceptions\BlogException;
@@ -16,7 +17,7 @@ class UserController extends Controller
         $this->user = $user;
     }
     
-    public function register(Request $request)
+    public function register(RegisterUserRequest $request)
     {
         try {
             $result = $this->user->register(
@@ -38,7 +39,7 @@ class UserController extends Controller
         }
     }
     
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
         try {
             
@@ -87,7 +88,7 @@ class UserController extends Controller
         try {
             return response()->json([
                 'status' => 'success',
-                'data' => $this->user->details(),
+                'data' => $this->user->show(),
             ], 200);
         } catch (\Exception $e) {
             return response()->json([

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
-use Illuminate\Http\Request;
+use App\Http\Requests\StorePostRequest;
 use App\Http\Controllers\Controller;
 use App\Exceptions\BlogException;
 use App\Services\PostService;
@@ -53,7 +53,7 @@ class PostController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
         try {
             return response()->json([

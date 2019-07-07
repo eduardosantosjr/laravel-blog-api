@@ -23,7 +23,7 @@ Route::group(['namespace' => 'v1', 'prefix' => 'v1'], function () {
         Route::get('details', 'UserController@details')->name('auth.user.details');
         Route::get('logout', 'UserController@logout')->name('auth.user.logout');
 
-        Route::group(['prefix' => 'posts'], function () {
+        Route::group(['prefix' => 'posts', 'where' => ['id' => '[0-9]+']], function () {
             Route::get('', 'PostController@list')->name('blog.post.list');
             Route::post('store', 'PostController@store')->name('blog.post.store');
             Route::get('{id}/show', 'PostController@show')->name('blog.post.show');

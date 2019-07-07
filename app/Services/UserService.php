@@ -59,7 +59,7 @@ class UserService
         Auth::user()->token()->revoke();
     }
 
-    public function details() : Object
+    public function show() : Object
     {
         return Auth::user();
     }
