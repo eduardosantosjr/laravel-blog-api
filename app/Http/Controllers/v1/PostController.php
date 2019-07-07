@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\v1;
 
+use App\Http\Requests\SearchRequest;
 use App\Http\Requests\StorePostRequest;
 use App\Http\Controllers\Controller;
 use App\Exceptions\BlogException;
@@ -136,8 +137,21 @@ class PostController extends Controller
         }
     }
 
-    /*public function search()
+    public function search(SearchRequest $request)
     {
-
-    }*/
+        try {
+            return response()->json([
+                'status' => 'success',
+                'data' => $this->post->search(
+                    $request->content
+                ),
+            ], 200);
+        
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage(),
+            ], 500);
+        }
+    }
 }

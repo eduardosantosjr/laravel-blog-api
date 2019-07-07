@@ -70,6 +70,15 @@ class PostRepository implements PostInterface
 
     public function search(string $content)
     {
-        return 'search';
+        $post = Post::query()
+            ->select(
+                'title',
+                'content'
+            )
+            ->search($content)
+            ->where('published', true)
+            ->paginate(10);
+        
+        return $post;
     }
 }
