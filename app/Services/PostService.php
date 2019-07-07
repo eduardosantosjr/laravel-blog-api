@@ -87,6 +87,6 @@ class PostService
 
     public function search(string $content)
     {
-        return 'search';
+        return $this->post->search($content);
     }
 }
