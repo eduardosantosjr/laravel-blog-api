@@ -14,18 +14,18 @@ class PostService
         $this->post = $post;
     }
     
-    public function list()
+    public function getByUserId()
     {
         $user = Auth::user();
         
-        return $this->post->list($user->id);
+        return $this->post->getByUserId($user->id);
     }
 
-    public function show(int $id)
+    public function getByIdAndUserId(int $id)
     {
         $user = Auth::user();
         
-        return $this->post->find(
+        return $this->post->getByIdAndUserId(
             $id, 
             $user->id
         );
@@ -35,54 +35,45 @@ class PostService
         $id,
         string $title,
         string $content
-    ) :string 
-    {
+    ) {
         $user = Auth::user();
 
-        $this->post->store(
+        return $this->post->store(
             $id,
             $user->id,
             $title,
             $content
         );
-        
-        return 'Post stored successfully!';
     }
 
     public function delete(int $id)
     {
         $user = Auth::user();
         
-        $this->post->delete(
+        return $this->post->delete(
             $id,
             $user->id
         );
-        
-        return 'Post deleted successfully!';
     }
 
     public function publish(int $id)
     {
         $user = Auth::user();
         
-        $this->post->publish(
+        return $this->post->publish(
             $id,
             $user->id
         );
-        
-        return 'Post published successfully!';
     }
 
     public function unpublish(int $id)
     {
         $user = Auth::user();
         
-        $this->post->unpublish(
+        return $this->post->unpublish(
             $id,
             $user->id
         );
-        
-        return 'Post unpublished successfully!';
     }
 
     public function search(string $content)

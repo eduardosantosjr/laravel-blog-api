@@ -17,6 +17,8 @@ abstract class TestCase extends BaseTestCase
 
     private function setUpPassport()
     {
+        $this->artisan('migrate');
+
         $clientRepository = new ClientRepository();
         
         $client = $clientRepository->createPersonalAccessClient(

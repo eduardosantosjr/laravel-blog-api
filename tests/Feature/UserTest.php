@@ -3,39 +3,60 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class UserTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
+
+    private $name = 'Test User';
+    private $email = 'test@mail.com';
+    private $password = '123456';
 
     public function testRegister()
     {
+        $response = $this->registerUser();
+
+        $response->assertStatus(200);
+    }
+
+    public function testLogin()
+    {
+        $this->registerUser();
+        
         $response = $this->post(
-            route('auth.user.register'),
+            route('auth.user.login'),
             [
-                'name' => 'Test User',
-                'email' => 'test@mail.com',
-                'password' => '123456'
+                'email' => $this->email,
+                'password' => $this->password,
             ]
         );
 
         $response->assertStatus(200);
     }
 
-    /**
-     * @depends testRegister
-     */
-    //public function testLogin()
+    public function testDetails()
+    {
+        $user = $this->registerUser()->decodeResponseJson();
+        
+        dump($user);
+        $this->assertTrue(true);
+        dump('isadump');
 
-    /**
-     * @depends testLogin
-     */
-    
-    //public function testDetails()
+        $this->artisan('migrate:rollback');
+    }
 
-    /**
-     * @depends testDetails
-     */
     //public function testLogout()
+
+    private function registerUser()
+    {
+        return $this->post(
+            route('auth.user.register'),
+            [
+                'name' => $this->name,
+                'email' => $this->email,
+                'password' => $this->password,
+            ]
+        );
+    }
 }

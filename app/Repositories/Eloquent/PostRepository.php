@@ -9,18 +9,18 @@ use Carbon\Carbon;
 
 class PostRepository implements PostInterface
 {
-    public function list(int $user_id)
+    public function getByUserId(int $userId)
     {
         return Post::query()
-            ->where('user_id', $user_id)
+            ->where('userId', $userId)
             ->paginate(10);
     }
     
-    public function find(int $id, int $user_id)
+    public function getByIdAndUserId(int $id, int $userId)
     {
         $post = Post::query()
             ->where('id', $id)
-            ->where('user_id', $user_id)
+            ->where('userId', $userId)
             ->first();
         
         if (!$post) {
@@ -32,36 +32,35 @@ class PostRepository implements PostInterface
     
     public function store(
         $id,
-        int $user_id,
+        int $userId,
         string $title,
         string $content
-    ) : void
-    {
+    ) : void {
         $post = Post::firstOrNew(['id' => $id]);
-        $post->user_id = $user_id;
+        $post->userId = $userId;
         $post->title = $title;
         $post->content = $content;
         $post->save();
     }
 
-    public function delete(int $id, int $user_id) : void
+    public function delete(int $id, int $userId) : void
     {
-        $post = $this->find($id, $user_id);
+        $post = $this->find($id, $userId);
         $post->delete();
     }
     
-    public function publish(int $id, int $user_id) : void
+    public function publish(int $id, int $userId) : void
     {
-        $post = $this->find($id, $user_id);
+        $post = $this->find($id, $userId);
         $post->update([
             'published' => true,
             'published_at' => Carbon::now()->toDateTimeString()
         ]);
     }
 
-    public function unpublish(int $id, int $user_id) : void
+    public function unpublish(int $id, int $userId) : void
     {
-        $post = $this->find($id, $user_id);
+        $post = $this->find($id, $userId);
         $post->update([
             'published' => false,
             'published_at' => null
