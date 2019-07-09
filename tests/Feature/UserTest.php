@@ -12,6 +12,12 @@ class UserTest extends TestCase
     private $name = 'Test User';
     private $email = 'test@mail.com';
     private $password = '123456';
+    
+    public function setUp() : void
+    {
+        parent::setUp();
+        $this->setUpPassport();
+    }
 
     public function testRegister()
     {
@@ -38,15 +44,30 @@ class UserTest extends TestCase
     public function testDetails()
     {
         $user = $this->registerUser()->decodeResponseJson();
-        
-        dump($user);
-        $this->assertTrue(true);
-        dump('isadump');
 
-        $this->artisan('migrate:rollback');
+        $response = $this->get(
+            route('auth.user.details'),
+            [
+                'Authorization' => 'Bearer '. $user['data']['token']
+            ]
+        );
+        
+        $response->assertStatus(200);
     }
 
-    //public function testLogout()
+    public function testLogout()
+    {
+        $user = $this->registerUser()->decodeResponseJson();
+
+        $response = $this->get(
+            route('auth.user.logout'),
+            [
+                'Authorization' => 'Bearer '. $user['data']['token']
+            ]
+        );
+        
+        $response->assertStatus(200);
+    }
 
     private function registerUser()
     {

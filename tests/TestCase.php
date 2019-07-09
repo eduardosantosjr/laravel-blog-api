@@ -9,16 +9,8 @@ abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    public function setUp() : void
+    protected function setUpPassport()
     {
-        parent::setUp();
-        $this->setUpPassport();
-    }
-
-    private function setUpPassport()
-    {
-        $this->artisan('migrate');
-
         $clientRepository = new ClientRepository();
         
         $client = $clientRepository->createPersonalAccessClient(
