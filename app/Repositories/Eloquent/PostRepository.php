@@ -12,7 +12,7 @@ class PostRepository implements PostInterface
     public function getByUserId(int $userId)
     {
         return Post::query()
-            ->where('userId', $userId)
+            ->where('user_id', $userId)
             ->paginate(10);
     }
     
@@ -20,7 +20,7 @@ class PostRepository implements PostInterface
     {
         $post = Post::query()
             ->where('id', $id)
-            ->where('userId', $userId)
+            ->where('user_id', $userId)
             ->first();
         
         if (!$post) {
@@ -37,7 +37,7 @@ class PostRepository implements PostInterface
         string $content
     ) : void {
         $post = Post::firstOrNew(['id' => $id]);
-        $post->userId = $userId;
+        $post->user_id = $userId;
         $post->title = $title;
         $post->content = $content;
         $post->save();
@@ -45,13 +45,13 @@ class PostRepository implements PostInterface
 
     public function delete(int $id, int $userId) : void
     {
-        $post = $this->find($id, $userId);
+        $post = $this->getByIdAndUserId($id, $userId);
         $post->delete();
     }
     
     public function publish(int $id, int $userId) : void
     {
-        $post = $this->find($id, $userId);
+        $post = $this->getByIdAndUserId($id, $userId);
         $post->update([
             'published' => true,
             'published_at' => Carbon::now()->toDateTimeString()
@@ -60,7 +60,7 @@ class PostRepository implements PostInterface
 
     public function unpublish(int $id, int $userId) : void
     {
-        $post = $this->find($id, $userId);
+        $post = $this->getByIdAndUserId($id, $userId);
         $post->update([
             'published' => false,
             'published_at' => null
