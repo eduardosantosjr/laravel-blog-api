@@ -26,43 +26,57 @@ class UserController extends Controller
                 $request->password
             );
 
-            return response()->json([
-                'status' => 'success',
-                'data' => $result,
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $result,
+                ],
+                200
+            );
 
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ], 
+                500
+            );
         }
     }
     
     public function login(LoginRequest $request)
     {
         try {
-            
             $result = $this->user->login(
                 $request->email,
                 $request->password
             );
 
-            return response()->json([
-                'status' => 'success',
-                'data' => $result,
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $result,
+                ], 
+                200
+            );
             
         } catch (BlogException $e) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'message' => $e->getMessage(),
+                ],
+                422
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
@@ -71,30 +85,42 @@ class UserController extends Controller
         try {
             $this->user->logout();
 
-            return response()->json([
-                'status' => 'success',
-                'data' => null,
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => null,
+                ],
+                200
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function details()
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->user->show(),
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $this->user->getUserSession(),
+                ],
+                200
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 }

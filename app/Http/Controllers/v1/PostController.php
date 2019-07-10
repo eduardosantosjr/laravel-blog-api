@@ -20,138 +20,200 @@ class PostController extends Controller
     public function list()
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->post->list(),
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $this->post->getByUserId(),
+                ],
+                200
+            );
         
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function show($id)
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->post->show($id),
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $this->post->getByIdAndUserId($id),
+                ],
+                200
+            );
         
         } catch (BlogException $e) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'message' => $e->getMessage(),
+                ],
+                422
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function store(StorePostRequest $request)
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->post->store(
-                    $request->id,
-                    $request->title,
-                    $request->content
-                ),
-            ], 200);
+            $this->post->store(
+                $request->id,
+                $request->title,
+                $request->content
+            );
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Post stored successfully!',
+                ],
+                200
+            );
         
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function delete($id)
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'message' => $this->post->delete($id),
-            ], 200);
+            $this->post->delete($id);
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Post deleted successfully!',
+                ],
+                200
+            );
         
         } catch (BlogException $e) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'message' => $e->getMessage(),
+                ],
+                422
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function publish($id)
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->post->publish($id),
-            ], 200);
+            $this->post->publish($id);
+
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Post published successfully!',
+                ],
+                200
+            );
         
         } catch (BlogException $e) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'message' => $e->getMessage(),
+                ],
+                422
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function unpublish($id)
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->post->unpublish($id),
-            ], 200);
+            $this->post->unpublish($id);
+            
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'message' => 'Post unpublished successfully!',
+                ],
+                200
+            );
         
         } catch (BlogException $e) {
-            return response()->json([
-                'status' => 'fail',
-                'message' => $e->getMessage(),
-            ], 422);
+            return response()->json(
+                [
+                    'status' => 'fail',
+                    'message' => $e->getMessage(),
+                ],
+                422
+            );
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 
     public function search(SearchRequest $request)
     {
         try {
-            return response()->json([
-                'status' => 'success',
-                'data' => $this->post->search(
-                    $request->content
-                ),
-            ], 200);
+            return response()->json(
+                [
+                    'status' => 'success',
+                    'data' => $this->post->search(
+                        $request->content
+                    ),
+                ],
+                200
+            );
         
         } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => $e->getMessage(),
-            ], 500);
+            return response()->json(
+                [
+                    'status' => 'error',
+                    'message' => $e->getMessage(),
+                ],
+                500
+            );
         }
     }
 }

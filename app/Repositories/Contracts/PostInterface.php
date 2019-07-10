@@ -4,16 +4,16 @@ namespace App\Repositories\Contracts;
 
 interface PostInterface
 {
-    public function list(int $user_id);
-    public function find(int $id, int $user_id);
+    public function getByUserId(int $userId);
+    public function getByIdAndUserId(int $id, int $userId);
     public function store(
         $id,
-        int $user_id,
+        int $userId,
         string $title,
         string $content
     );
-    public function delete(int $id, int $user_id);
-    public function publish(int $id, int $user_id);
-    public function unpublish(int $id, int $user_id);
+    public function delete(int $id, int $userId);
+    public function publish(int $id, int $userId);
+    public function unpublish(int $id, int $userId);
     public function search(string $content);
 }
